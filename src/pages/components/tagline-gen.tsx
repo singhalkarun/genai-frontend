@@ -1,6 +1,6 @@
 import React from 'react';
 
-function LogoGenPage() {
+function TaglineGenPage() {
     return (
         <div>
             <h1>On the tagline gen page</h1>
@@ -8,4 +8,4 @@ function LogoGenPage() {
     );
 }
 
-export default LogoGenPage;
+export default TaglineGenPage;

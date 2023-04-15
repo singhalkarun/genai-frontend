@@ -3,7 +3,10 @@ import { useState, useEffect } from "react";
 import { Inter } from "next/font/google";
 import axios from 'axios'
 import { createProxyMiddleware } from 'http-proxy-middleware';
-
+import WelcomePage from "./components/welcome";
+import CompanyNameGenPage from "./components/company-name-gen";
+import TaglineGenPage from "./components/tagline-gen";
+import LogoGenPage from "./components/logo-gen";
 
 const inter = Inter({ subsets: ["latin"] });
 interface ChatMessage {
@@ -13,6 +16,8 @@ interface ChatMessage {
 
 export default function Home() {
   const [inputValue, setInputValue] = useState<string>("");
+  const [step, setStep] = useState<string>("0");
+  const [contextId, setContextId] = useState<string>("");
   const [chatLog, setChatLog] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -29,19 +34,18 @@ export default function Home() {
     setInputValue("");
   };
 
-  
-  const sendMessage = async  (message: string) => {
+  const sendMessage = async (message: string) => {
     const url =
       "https://9fso8yscb5.execute-api.ap-south-1.amazonaws.com/default/fetchAnswerFromChatGPT";
-      
+
     const headers = {
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers":"Origin, X-Requested-With, Content-Type, Accept"
-      
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"
+
     }
- 
+
     let body = {
       messages: [
         {
@@ -56,15 +60,28 @@ export default function Home() {
       content: "Hello! How can I assist you today?",
     };
     //  let response = await axios.post(url, body, {headers: headers})
-     console.log(response, 'GG')
-    
+    console.log(response, 'GG')
+
 
     setChatLog((prevChatLog) => [...prevChatLog, { type: response?.role, message: response?.content }])
   };
 
+  //On page refresh getting step and contextId from local storage
+  useEffect(() => {
+    const step = localStorage.getItem('step');
+    const contextId = localStorage.getItem('contextId')
+    if (step) setStep(step)
+    if (contextId) setContextId(contextId)
+  }, [])
+
   return (
     <>
-      <h1 className="text-3xl font-bold ">GEN-AI</h1>
+      {step === "0" ? <WelcomePage step={step} setStep={setStep} contextId={contextId} setContextId={setContextId} /> :
+        step === "1" ? <CompanyNameGenPage /> :
+          step === "2" ? <TaglineGenPage /> :
+            step === "3" ? <LogoGenPage /> : ""}
+
+      {/* <h1 className="text-3xl font-bold ">GEN-AI</h1>
 
       {chatLog.map((message, index) => (
         <div key="index">{message.message}</div>
@@ -77,7 +94,7 @@ export default function Home() {
           onChange={(e) => setInputValue(e.target.value)}
         />
         <button type="submit">Send</button>
-      </form>
+      </form> */}
     </>
   );
 }
