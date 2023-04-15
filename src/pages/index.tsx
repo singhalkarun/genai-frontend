@@ -59,7 +59,7 @@ export default function Home() {
      console.log(response, 'GG')
     
 
-  setChatLog((prevChatLog) => [...prevChatLog, { type: response?.role, message: response?.content }])
+    setChatLog((prevChatLog) => [...prevChatLog, { type: response?.role, message: response?.content }])
   };
 
   return (
