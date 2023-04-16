@@ -60,9 +60,7 @@ const TaglineGenPage = (props: PropsType) => {
     const [taglineQuestionsObj, setTaglineQuestionsObj] = useState<any>([])
 
     const taglineQuestions = [
-        "What problem does your startup solve?",
-        "What's the one thing you want people to remember about your startup?",
-        "Additional information?"
+        "What's the one thing you want people to remember about your startup?"
     ]
 
     const [postQuestion, { data, error, loading }] = useMutation(INSERT_CONVERSATION_MUTATION)
@@ -237,7 +235,7 @@ const TaglineGenPage = (props: PropsType) => {
                             <h1 className="text-4xl font-bold text-center mb-4" style={{
                                 marginTop: subscriptionResult?.data?.conversations_by_pk?.answer ? "60px" : "0px"
                             }}>
-                                Choose any, and if you don't love it, simply hit retry.
+                                {subscriptionResult?.data?.conversations_by_pk?.answer ? "Choose any tagline, and if you don't love any, simply hit retry." : "Generating tagline..."}
                             </h1>
                             {subscriptionResult?.loading != undefined && (subscriptionResult?.loading == true || (subscriptionResult?.data != undefined && subscriptionResult?.data?.conversations_by_pk?.answer == null)) && loadingScreen}
 

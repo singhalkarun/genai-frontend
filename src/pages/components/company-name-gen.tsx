@@ -262,7 +262,7 @@ const CompanyNameGenPage = (props: PropsType) => {
                             <h1 className="text-4xl font-bold text-center mb-4" style={{
                                 marginTop: subscriptionResult?.data?.conversations_by_pk?.answer ? "60px" : "0px"
                             }}>
-                                Choose any, and if you don't love it, simply hit retry.
+                                {subscriptionResult?.data?.conversations_by_pk?.answer ? "Choose any company name, and if you don't love any, simply hit retry." : "Generating company name..."}
                             </h1>
                             {/* {subscriptionResult?.loading != undefined && subscriptionResult?.loading != true && subscriptionResult?.data != undefined && subscriptionResult?.data?.conversations_by_pk?.answer != null && <div className={`border ${error ? "border-red-500" : "border-gray-400"
                                 } w-full p-4 mb-8 border-2 border-black rounded-lg resize-none`}> {subscriptionResult?.data?.conversations_by_pk?.answer}</div>} */}
