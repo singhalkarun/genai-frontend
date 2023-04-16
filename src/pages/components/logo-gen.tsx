@@ -22,12 +22,12 @@ declare global {
 function LogoGenPage() {
     
     const loadingScreen = (
-        <div id="loading-screen">
+        <div id="loading-screen" style={{display: 'flex', flexDirection: 'row', justifyContent: 'center'}}>
           <lottie-player
             src="https://assets9.lottiefiles.com/packages/lf20_riAqnQrYxZ.json"
             background="transparent"
             speed="0.6"
-            style={{ width: "600px", height: "300px" }}
+            style={{ width: '100%', height: "800px" }}
             loop
             autoplay
           ></lottie-player>
