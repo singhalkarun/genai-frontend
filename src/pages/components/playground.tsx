@@ -1,28 +1,12 @@
-import Image from "next/image";
 import { useState, useEffect } from "react";
 import { Inter } from "next/font/google";
-import axios from "axios";
-import TypingAnimation from "./TypingAnimation";
-import { gql, useQuery } from "@apollo/client";
-import {
-  ApolloClient,
-  InMemoryCache,
-  createHttpLink,
-  ApolloLink,
-  from,
-} from "@apollo/client";
+import { gql, useSubscription } from "@apollo/client";
 import { useMutation } from "@apollo/client";
 
-const inter = Inter({ subsets: ["latin"] });
-interface ChatMessage {
-  type: string;
-  message: string;
-}
-
 const INSERT_CONVERSATION_MUTATION = gql`
-  mutation PostQuestion($question: String, $conversation_id: uuid) {
+  mutation PostQuestion($question: String ) {
     insert_conversations_one(
-      object: { question: $question, conversation_id: $conversation_id }
+      object: { question: $question }
     ) {
       id
       conversation_id
@@ -31,42 +15,46 @@ const INSERT_CONVERSATION_MUTATION = gql`
   }
 `;
 
+const CONVERSATION_SUBSCRIPTION = gql`
+  subscription ConversationSubscription ($id: Int!) {
+    conversations_by_pk(id: $id) {
+      id
+      answer
+    }
+  }
+    `;
+
 export default function Playground() {
-  const [insertConversation, { data, error, loading }] = useMutation(
-    INSERT_CONVERSATION_MUTATION
-  );
-  if (loading) return <p>Loading...........</p>;
-  if (error) return <p>Oooooooopssss.......... {error.message}</p>;
-  console.log(data, "DATTTA");
-
   const [inputValue, setInputValue] = useState<string>("");
-  const [chatLog, setChatLog] = useState<ChatMessage[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [id, setId] = useState<string>("");
 
-  const [postQuestion] = useMutation(INSERT_CONVERSATION_MUTATION);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+
+  const [postQuestion, { data, error, loading }] = useMutation(INSERT_CONVERSATION_MUTATION)
+
+    const subscriptionResult = useSubscription(
+      CONVERSATION_SUBSCRIPTION,
+      { variables: { id: id } }
+    );
+
+    console.log(subscriptionResult)
+  
+  
+  if (loading) return 'Submitting...';
+  if (error) return `Submission error! ${error.message}`;
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    sendMessage(inputValue);
+    try {
+      const response = await postQuestion({ variables: { question: inputValue } })
 
-    setInputValue("");
+      setId(response?.data?.insert_conversations_one?.id)
+    } catch (error) {
+      
+    }
   };
 
-  const sendMessage = async (message: string) => {
-    setIsLoading(true);
-
-    postQuestion({ variables: { question: message, conversation_id: '08c253f0-fd72-4a66-9d15-9eb07cdf641e' } })
-      .then((response) => {
-        console.log(JSON.stringify(response), "RESPONSE");
-
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        setIsLoading(false);
-        console.log(error);
-      });
-  };
 
   return (
     <form onSubmit={handleSubmit} className="flex-none p-6">
@@ -88,6 +76,9 @@ export default function Playground() {
         >
           Send
         </button>
+        {subscriptionResult?.loading != undefined && subscriptionResult?.loading != true && subscriptionResult?.data != undefined && subscriptionResult?.data?.conversations_by_pk?.answer != null && <div  className={`border ${
+            error ? "border-red-500" : "border-gray-400"
+          } w-full p-4 mb-8 border-2 border-black rounded-lg resize-none`}> {subscriptionResult?.data?.conversations_by_pk?.answer}</div>}
       </div>
     </form>
   );
