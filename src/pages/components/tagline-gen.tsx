@@ -204,7 +204,7 @@ const TaglineGenPage = (props: PropsType) => {
                     subPage === 'selection' ? (
                         <>
                             <h1 className="text-4xl font-bold text-center mb-4">
-                                Choose anyone, and if you don't love it, simply hit retry.
+                                Choose any, and if you don't love it, simply hit retry.
                             </h1>
                             {subscriptionResult?.loading != undefined && (subscriptionResult?.loading == true || (subscriptionResult?.data != undefined && subscriptionResult?.data?.conversations_by_pk?.answer == null)) && <TypingAnimation />}
 
