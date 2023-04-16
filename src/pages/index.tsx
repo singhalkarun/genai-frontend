@@ -46,7 +46,6 @@ export default function Home({ hasuraBaseUrl, hasuraAdminSecret }: HomeProps) {
     <>
       <Head>
         <title>BrandSeed</title>
-        {/* <link rel="icon" href="/my-favicon.ico" /> */}
       </Head>
       {/* NAVBAR */}
       <div className="bg-gray-800 py-2 fixed top-0 w-full z-10">
