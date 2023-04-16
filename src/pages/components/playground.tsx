@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Inter } from "next/font/google";
 import { gql, useSubscription } from "@apollo/client";
 import { useMutation } from "@apollo/client";
+import TypingAnimation from "./TypingAnimation";
 
 const INSERT_CONVERSATION_MUTATION = gql`
   mutation PostQuestion($question: String ) {
@@ -76,6 +77,8 @@ export default function Playground() {
         >
           Send
         </button>
+        {subscriptionResult?.loading != undefined && (subscriptionResult?.loading == true || (subscriptionResult?.data != undefined && subscriptionResult?.data?.conversations_by_pk?.answer == null))  && <TypingAnimation />}
+        
         {subscriptionResult?.loading != undefined && subscriptionResult?.loading != true && subscriptionResult?.data != undefined && subscriptionResult?.data?.conversations_by_pk?.answer != null && <div  className={`border ${
             error ? "border-red-500" : "border-gray-400"
           } w-full p-4 mb-8 border-2 border-black rounded-lg resize-none`}> {subscriptionResult?.data?.conversations_by_pk?.answer}</div>}
