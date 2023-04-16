@@ -53,6 +53,9 @@ const WelcomePage = (props: propsType) => {
             <button style={buttonStyle} onClick={() => {
                 setStep("1")
             }}>Start your journey now</button>
+            <button style={buttonStyle} onClick={() => {
+                setStep("5")
+            }}>Demo</button>
         </div>
     );
 };

@@ -7,6 +7,11 @@ import WelcomePage from "./components/welcome";
 import CompanyNameGenPage from "./components/company-name-gen";
 import TaglineGenPage from "./components/tagline-gen";
 import LogoGenPage from "./components/logo-gen";
+import Demo from "./components/demo";
+import Playground from "./components/playground";
+
+
+
 
 const inter = Inter({ subsets: ["latin"] });
 interface ChatMessage {
@@ -79,7 +84,9 @@ export default function Home() {
       {step === "0" ? <WelcomePage step={step} setStep={setStep} contextId={contextId} setContextId={setContextId} /> :
         step === "1" ? <CompanyNameGenPage /> :
           step === "2" ? <TaglineGenPage /> :
-            step === "3" ? <LogoGenPage /> : ""}
+            step === "3" ? <LogoGenPage /> : 
+            step === "4" ? <Demo /> :
+            step === "5" ?  <Playground /> : ""}
 
       {/* <h1 className="text-3xl font-bold ">GEN-AI</h1>
 

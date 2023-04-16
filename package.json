@@ -9,17 +9,20 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@apollo/client": "^3.7.12",
     "@types/node": "18.15.11",
     "@types/react": "18.0.35",
     "@types/react-dom": "18.0.11",
     "axios": "^0.27.2",
     "eslint": "8.38.0",
     "eslint-config-next": "13.3.0",
+    "graphql": "^16.6.0",
     "http-proxy-middleware": "^2.0.6",
+    "isomorphic-unfetch": "^4.0.2",
     "next": "13.3.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "typescript": "5.0.4"
+    "typescript": "^5.0.4"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.14",
