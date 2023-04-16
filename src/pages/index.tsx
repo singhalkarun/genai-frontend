@@ -1,12 +1,10 @@
-import Image from "next/image";
 import { useState, useEffect } from "react";
 import { Inter } from "next/font/google";
-import axios from 'axios'
-import { createProxyMiddleware } from 'http-proxy-middleware';
 import WelcomePage from "./components/welcome";
 import CompanyNameGenPage from "./components/company-name-gen";
 import TaglineGenPage from "./components/tagline-gen";
 import LogoGenPage from "./components/logo-gen";
+import JourneyBar from "./components/journey-bar";
 
 const inter = Inter({ subsets: ["latin"] });
 interface ChatMessage {
@@ -76,10 +74,17 @@ export default function Home() {
 
   return (
     <>
-      {step === "0" ? <WelcomePage step={step} setStep={setStep} contextId={contextId} setContextId={setContextId} /> :
-        step === "1" ? <CompanyNameGenPage /> :
-          step === "2" ? <TaglineGenPage /> :
-            step === "3" ? <LogoGenPage /> : ""}
+      <div style={{ display: "flex", flexDirection: "row", height: "auto" }}>
+        <div>
+          <JourneyBar step={step} setStep={setStep} contextId={contextId} setContextId={setContextId} />
+        </div>
+        <div className="container mx-auto px-4 h-screen flex justify-center items-center bg-gray-100">
+          {step === "0" ? <WelcomePage step={step} setStep={setStep} contextId={contextId} setContextId={setContextId} /> :
+            step === "1" ? <CompanyNameGenPage step={step} setStep={setStep} contextId={contextId} setContextId={setContextId} /> :
+              step === "2" ? <TaglineGenPage step={step} setStep={setStep} contextId={contextId} setContextId={setContextId} /> :
+                step === "3" ? <LogoGenPage /> : ""}
+        </div>
+      </div>
 
       {/* <h1 className="text-3xl font-bold ">GEN-AI</h1>
 
