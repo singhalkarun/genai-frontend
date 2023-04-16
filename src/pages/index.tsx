@@ -10,6 +10,8 @@ import Playground from "./components/playground";
 
 
 import JourneyBar from "./components/journey-bar";
+import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+import getClient from "./api/apollo";
 
 const inter = Inter({ subsets: ["latin"] });
 interface ChatMessage {
@@ -17,7 +19,12 @@ interface ChatMessage {
   message: string;
 }
 
-export default function Home() {
+interface HomeProps {
+  hasuraBaseUrl: string
+  hasuraAdminSecret: string
+}
+
+export default function Home({hasuraBaseUrl, hasuraAdminSecret}: HomeProps) {
   const [inputValue, setInputValue] = useState<string>("");
   const [step, setStep] = useState<string>("0");
   const [contextId, setContextId] = useState<string>("");
@@ -78,7 +85,7 @@ export default function Home() {
   }, [])
 
   return (
-    <>
+    <ApolloProvider client={getClient(hasuraBaseUrl, hasuraAdminSecret)}>
       {/* NAVBAR */}
       <div className="bg-gray-800 py-2">
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
@@ -102,7 +109,7 @@ export default function Home() {
             </button>
           </div>
           <div className="hidden sm:flex sm:items-center sm:ml-6">
-            <p className="text-gray-100 hover:text-gray-500 text-base px-3 py-2 rounded-md font-medium">Feeling stuck? Let's hit the restart button and start fresh!</p>
+            <p className="text-gray-100 hover:text-gray-500 text-base px-3 py-2 rounded-md font-medium">{`Feeling stuck? Let's hit the restart button and start fresh!`}</p>
             <button
               className="ml-4 bg-purple-500 rounded-lg px-4 py-2 text-white font-semibold focus:outline-none hover:bg-purple-600 transition-colors duration-300 "
               style={{
@@ -132,6 +139,18 @@ export default function Home() {
                     step === "5" ? <Playground /> : ""}
         </div>
       </div>
-    </>
+    </ApolloProvider>
   );
+}
+
+export async function getStaticProps() {
+  const hasuraBaseUrl = process.env.HASURA_BASE_URL!
+  const hasuraAdminSecret = process.env.HASURA_ADMIN_SECRET!
+
+  return {
+    props: {
+      hasuraBaseUrl,
+      hasuraAdminSecret
+    }
+  }
 }

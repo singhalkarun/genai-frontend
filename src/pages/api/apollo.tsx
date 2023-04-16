@@ -3,14 +3,15 @@ import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
 import { createClient } from "graphql-ws";
 import { getMainDefinition } from "@apollo/client/utilities";
 
-const wsLink =
+const getClient = (hasuraBaseUrl: string, hasuraAdminSecret: string) => {
+    const wsLink =
     typeof window !== "undefined"
         ? new GraphQLWsLink(
                 createClient({
-                    url: "ws://65.0.223.215:8080/v1/graphql",
+                    url: `wss://${hasuraBaseUrl}/v1/graphql`,
                     connectionParams: {
                         headers: {
-                            'x-hasura-admin-secret':'GenAi@Contlo' 
+                            'x-hasura-admin-secret': hasuraAdminSecret
                         }
                     }
                     
@@ -19,9 +20,9 @@ const wsLink =
         : null;
 
 const httpLink = new HttpLink({
-    uri: `http://65.0.223.215:8080/v1/graphql`,
+    uri: `https://${hasuraBaseUrl}/v1/graphql`,
     headers: {
-        'x-hasura-admin-secret':'GenAi@Contlo'
+        'x-hasura-admin-secret': hasuraAdminSecret
     }
 });
 
@@ -43,6 +44,9 @@ const link =
 const client = new ApolloClient({
     link,
     cache: new InMemoryCache(),
-});
+}); 
 
-export default client;
+return client
+}
+
+export default getClient;
