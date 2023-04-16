@@ -2,6 +2,24 @@ import React, { useEffect, useState } from 'react';
 import { gql, useSubscription } from "@apollo/client";
 import { useMutation } from "@apollo/client";
 import TypingAnimation from './TypingAnimation';
+import type { LottiePlayer } from 'lottie-web';
+
+declare global {
+    namespace JSX {
+        interface IntrinsicElements {
+            'lottie-player': React.DetailedHTMLProps<
+                React.HTMLAttributes<HTMLElement> & {
+                    src: string;
+                    background: string;
+                    speed: string;
+                    loop?: boolean;
+                    autoplay?: boolean;
+                },
+                HTMLElement
+            >;
+        }
+    }
+}
 
 const INSERT_CONVERSATION_MUTATION = gql`
   mutation PostQuestion($question: String ) {
@@ -76,6 +94,19 @@ const TaglineGenPage = (props: PropsType) => {
         setInputText(taglineQuestionsObj[currentQuestionIndex - 1]?.answer)
         setCurrentQuestionIndex(currentQuestionIndex - 1)
     }
+
+    const loadingScreen = (
+        <div id="loading-screen">
+            <lottie-player
+                src="https://assets10.lottiefiles.com/packages/lf20_ulci7gmd.json"
+                background="transparent"
+                speed="0.6"
+                style={{ width: "600px", height: "300px" }}
+                loop
+                autoplay
+            ></lottie-player>
+        </div>
+    );
 
     const handleGenerate = async () => {
         setSubPage("selection")
@@ -208,7 +239,7 @@ const TaglineGenPage = (props: PropsType) => {
                             }}>
                                 Choose any, and if you don't love it, simply hit retry.
                             </h1>
-                            {subscriptionResult?.loading != undefined && (subscriptionResult?.loading == true || (subscriptionResult?.data != undefined && subscriptionResult?.data?.conversations_by_pk?.answer == null)) && <TypingAnimation />}
+                            {subscriptionResult?.loading != undefined && (subscriptionResult?.loading == true || (subscriptionResult?.data != undefined && subscriptionResult?.data?.conversations_by_pk?.answer == null)) && loadingScreen}
 
                             {subscriptionResult?.loading != undefined && subscriptionResult?.loading != true && subscriptionResult?.data != undefined && subscriptionResult?.data?.conversations_by_pk?.answer != null && <div className="grid grid-cols-1 gap-4" style={{
                                 width: "100%"

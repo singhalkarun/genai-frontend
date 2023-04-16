@@ -2,7 +2,25 @@ import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
 import { gql, useSubscription } from "@apollo/client";
 import { useMutation } from "@apollo/client";
-import TypingAnimation from './TypingAnimation';
+// import TypingAnimation from './TypingAnimation';
+import type { LottiePlayer } from 'lottie-web';
+
+declare global {
+    namespace JSX {
+        interface IntrinsicElements {
+            'lottie-player': React.DetailedHTMLProps<
+                React.HTMLAttributes<HTMLElement> & {
+                    src: string;
+                    background: string;
+                    speed: string;
+                    loop?: boolean;
+                    autoplay?: boolean;
+                },
+                HTMLElement
+            >;
+        }
+    }
+}
 
 const INSERT_CONVERSATION_MUTATION = gql`
   mutation PostQuestion($question: String ) {
@@ -61,6 +79,19 @@ const CompanyNameGenPage = (props: PropsType) => {
     const subscriptionResult = useSubscription(
         CONVERSATION_SUBSCRIPTION,
         { variables: { id: contextId } }
+    );
+
+    const loadingScreen = (
+        <div id="loading-screen">
+            <lottie-player
+                src="https://assets10.lottiefiles.com/packages/lf20_ulci7gmd.json"
+                background="transparent"
+                speed="0.6"
+                style={{ width: "600px", height: "300px" }}
+                loop
+                autoplay
+            ></lottie-player>
+        </div>
     );
 
     const companyNameQuestions = [
@@ -235,7 +266,7 @@ const CompanyNameGenPage = (props: PropsType) => {
                             </h1>
                             {/* {subscriptionResult?.loading != undefined && subscriptionResult?.loading != true && subscriptionResult?.data != undefined && subscriptionResult?.data?.conversations_by_pk?.answer != null && <div className={`border ${error ? "border-red-500" : "border-gray-400"
                                 } w-full p-4 mb-8 border-2 border-black rounded-lg resize-none`}> {subscriptionResult?.data?.conversations_by_pk?.answer}</div>} */}
-                            {subscriptionResult?.loading != undefined && (subscriptionResult?.loading == true || (subscriptionResult?.data != undefined && subscriptionResult?.data?.conversations_by_pk?.answer == null)) && <TypingAnimation />}
+                            {subscriptionResult?.loading != undefined && (subscriptionResult?.loading == true || (subscriptionResult?.data != undefined && subscriptionResult?.data?.conversations_by_pk?.answer == null)) && loadingScreen}
 
                             {subscriptionResult?.loading != undefined && subscriptionResult?.loading != true && subscriptionResult?.data != undefined && subscriptionResult?.data?.conversations_by_pk?.answer != null && <div className="grid grid-cols-1 gap-4" style={{
                                 width: "100%"

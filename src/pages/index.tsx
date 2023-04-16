@@ -46,6 +46,7 @@ export default function Home({ hasuraBaseUrl, hasuraAdminSecret }: HomeProps) {
     <>
       <Head>
         <title>BrandSeed</title>
+        <script src="https://cdn.jsdelivr.net/npm/@lottiefiles/lottie-player@latest"></script>
       </Head>
       {/* NAVBAR */}
       <div className="bg-gray-800 py-2 fixed top-0 w-full z-10">
