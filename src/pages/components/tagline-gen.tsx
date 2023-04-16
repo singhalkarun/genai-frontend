@@ -203,7 +203,9 @@ const TaglineGenPage = (props: PropsType) => {
                 ) :
                     subPage === 'selection' ? (
                         <>
-                            <h1 className="text-4xl font-bold text-center mb-4">
+                            <h1 className="text-4xl font-bold text-center mb-4" style={{
+                                marginTop: subscriptionResult?.data?.conversations_by_pk?.answer ? "60px" : "0px"
+                            }}>
                                 Choose any, and if you don't love it, simply hit retry.
                             </h1>
                             {subscriptionResult?.loading != undefined && (subscriptionResult?.loading == true || (subscriptionResult?.data != undefined && subscriptionResult?.data?.conversations_by_pk?.answer == null)) && <TypingAnimation />}

@@ -52,7 +52,7 @@ export default function Home({ hasuraBaseUrl, hasuraAdminSecret }: HomeProps) {
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
           <div className="flex-shrink-0">
             <p className="bg-gradient-to-r from-blue-500 to-purple-500 text-transparent bg-clip-text text-3xl font-bold text-center" style={{
-              marginLeft: "-80px"
+              marginLeft: "-50px"
             }}>BrandSeed</p>
           </div>
 
