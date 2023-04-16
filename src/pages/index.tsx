@@ -7,7 +7,8 @@ import LogoGenPage from "./components/logo-gen";
 import Demo from "./components/demo";
 import Playground from "./components/playground";
 
-
+import { useRouter } from 'next/router'
+import ErrorPage from 'next/error'
 
 import JourneyBar from "./components/journey-bar";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
@@ -25,56 +26,9 @@ interface HomeProps {
 }
 
 export default function Home({hasuraBaseUrl, hasuraAdminSecret}: HomeProps) {
-  const [inputValue, setInputValue] = useState<string>("");
   const [step, setStep] = useState<string>("0");
   const [contextId, setContextId] = useState<string>("");
-  const [chatLog, setChatLog] = useState<ChatMessage[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    setChatLog((prevChatLog) => [
-      ...prevChatLog,
-      { type: "user", message: inputValue },
-    ]);
-
-    sendMessage(inputValue);
-
-    setInputValue("");
-  };
-
-  const sendMessage = async (message: string) => {
-    const url =
-      "https://9fso8yscb5.execute-api.ap-south-1.amazonaws.com/default/fetchAnswerFromChatGPT";
-
-    const headers = {
-      "Content-Type": "application/json",
-      "Accept": "application/json",
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"
-
-    }
-
-    let body = {
-      messages: [
-        {
-          role: "user",
-          content: message,
-        },
-      ],
-    };
-    console.log(url, "GGGGGGG", JSON.stringify(body));
-    let response = {
-      role: "assistant",
-      content: "Hello! How can I assist you today?",
-    };
-    //  let response = await axios.post(url, body, {headers: headers})
-    console.log(response, 'GG')
-
-
-    setChatLog((prevChatLog) => [...prevChatLog, { type: response?.role, message: response?.content }])
-  };
 
   //On page refresh getting step and contextId from local storage
   useEffect(() => {
@@ -84,8 +38,13 @@ export default function Home({hasuraBaseUrl, hasuraAdminSecret}: HomeProps) {
     if (contextId) setContextId(contextId)
   }, [])
 
+  const router = useRouter()
+  if (!router.isFallback && !hasuraAdminSecret && !hasuraBaseUrl) {
+      return <ErrorPage statusCode={404} />
+  }
+
   return (
-    <ApolloProvider client={getClient(hasuraBaseUrl, hasuraAdminSecret)}>
+    <>
       {/* NAVBAR */}
       <div className="bg-gray-800 py-2">
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
@@ -139,7 +98,7 @@ export default function Home({hasuraBaseUrl, hasuraAdminSecret}: HomeProps) {
                     step === "5" ? <Playground /> : ""}
         </div>
       </div>
-    </ApolloProvider>
+    </>
   );
 }
 
