@@ -10,9 +10,10 @@ interface PropsType {
 const TaglineGenPage = (props: PropsType) => {
     const { step, setStep, contextId, setContextId } = props;
     // const companyName = localStorage.getItem("companyName")
-    const companyName = "Mera Company"
+    const companyName = "GEN-AI"
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
     const [inputText, setInputText] = useState<string>('');
+    const [error, setError] = useState<string>('')
 
     const taglineQuestions = [
         "What problem does your startup solve?",
@@ -26,11 +27,25 @@ const TaglineGenPage = (props: PropsType) => {
     const [taglineQuestionsObj, setTaglineQuestionsObj] = useState<any>([])
 
     const handleNextQuestion = () => {
+        if (inputText === '') {
+            setError("Please provide answer for this question.")
+            return
+        }
+        else {
+            setError('')
+        }
         setInputText(taglineQuestionsObj[currentQuestionIndex + 1]?.answer)
         setCurrentQuestionIndex(currentQuestionIndex + 1)
     }
 
     const handlePrevQuestion = () => {
+        if (inputText === '') {
+            setError("Please provide answer for this question.")
+            return
+        }
+        else {
+            setError('')
+        }
         setInputText(taglineQuestionsObj[currentQuestionIndex - 1]?.answer)
         setCurrentQuestionIndex(currentQuestionIndex - 1)
     }
@@ -81,7 +96,7 @@ const TaglineGenPage = (props: PropsType) => {
                 <input
                     type="text"
                     placeholder="Please write your answer here..."
-                    className="w-full p-4 mb-8 border-2 border-black rounded-lg resize-none"
+                    className={`border ${error ? 'border-red-500' : 'border-gray-400'} w-full p-4 mb-8 border-2 border-black rounded-lg resize-none`}
                     value={inputText}
                     onChange={(e) => {
                         setInputText(e.target.value)
@@ -90,6 +105,9 @@ const TaglineGenPage = (props: PropsType) => {
                         setTaglineQuestionsObj(updatedTaglineQuestionObj)
                     }}
                 />
+                {error && (
+                    <p className="text-red-500 mt-2">{error}</p>
+                )}
                 {/* PREVIOUS QUESTION BUTTON */}
                 {currentQuestionIndex > 0 ?
                     (

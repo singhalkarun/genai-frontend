@@ -8,7 +8,7 @@ interface PropsType {
     setContextId: any;
 }
 
-const TaglineGenPage = (props: PropsType) => {
+const CompanyNameGenPage = (props: PropsType) => {
     const { step, setStep, contextId, setContextId } = props;
     // const companyName = localStorage.getItem("companyName")
     const companyName = "Mera Company"
@@ -16,7 +16,7 @@ const TaglineGenPage = (props: PropsType) => {
     const [inputText, setInputText] = useState<string>('');
     const [error, setError] = useState<string>('')
 
-    const taglineQuestions = [
+    const companyNameQuestions = [
         "Which industry you're serving for?",
         "What is the USP of your product?",
         "Who is your target audience ?",
@@ -25,19 +25,29 @@ const TaglineGenPage = (props: PropsType) => {
         "Number of company names?"
     ]
 
-    const [taglineQuestionsObj, setTaglineQuestionsObj] = useState<any>([])
+    const [companyNameQuestionsObj, setCompanyNameQuestionsObj] = useState<any>([])
 
     const handleNextQuestion = () => {
         if (inputText === '') {
             setError("Please provide answer for this question.")
             return
         }
-        setInputText(taglineQuestionsObj[currentQuestionIndex + 1]?.answer)
+        else {
+            setError('')
+        }
+        setInputText(companyNameQuestionsObj[currentQuestionIndex + 1]?.answer)
         setCurrentQuestionIndex(currentQuestionIndex + 1)
     }
 
     const handlePrevQuestion = () => {
-        setInputText(taglineQuestionsObj[currentQuestionIndex - 1]?.answer)
+        if (inputText === '') {
+            setError("Please provide answer for this question.")
+            return
+        }
+        else {
+            setError('')
+        }
+        setInputText(companyNameQuestionsObj[currentQuestionIndex - 1]?.answer)
         setCurrentQuestionIndex(currentQuestionIndex - 1)
     }
 
@@ -46,21 +56,21 @@ const TaglineGenPage = (props: PropsType) => {
 
         //GENERATING PROMPT BASED ON QUESTION ANSWER ARRAY OF OBJECTS
         let prompt = `company name: ${companyName} output format: write names directly and seperate each name with a comma`
-        for (let i = 0; i < taglineQuestionsObj.length; i++) {
-            prompt += ", " + taglineQuestionsObj[i]?.question + ": " + taglineQuestionsObj[i]?.answer
+        for (let i = 0; i < companyNameQuestionsObj.length; i++) {
+            prompt += ", " + companyNameQuestionsObj[i]?.question + ": " + companyNameQuestionsObj[i]?.answer
         }
 
         console.log("PROMPT >>", prompt)
     }
 
     useEffect(() => {
-        const questionsMap = taglineQuestions.map((question) => {
+        const questionsMap = companyNameQuestions.map((question) => {
             return {
                 question,
                 answer: ""
             };
         });
-        setTaglineQuestionsObj(questionsMap)
+        setCompanyNameQuestionsObj(questionsMap)
     }, [])
 
     return (
@@ -70,7 +80,7 @@ const TaglineGenPage = (props: PropsType) => {
             </h1>
             <div className="w-full px-4 md:max-w-2xl md:my-12">
                 <label className="text-lg font-bold mb-4" htmlFor="context">
-                    {taglineQuestionsObj[currentQuestionIndex]?.question}
+                    {companyNameQuestionsObj[currentQuestionIndex]?.question}
                 </label>
                 <input
                     type="text"
@@ -79,29 +89,29 @@ const TaglineGenPage = (props: PropsType) => {
                     value={inputText}
                     onChange={(e) => {
                         setInputText(e.target.value)
-                        let updatedTaglineQuestionObj = taglineQuestionsObj
-                        updatedTaglineQuestionObj[currentQuestionIndex].answer = e.target.value
-                        setTaglineQuestionsObj(updatedTaglineQuestionObj)
+                        let updatedCompanyNameQuestionsObj = companyNameQuestionsObj
+                        updatedCompanyNameQuestionsObj[currentQuestionIndex].answer = e.target.value
+                        setCompanyNameQuestionsObj(updatedCompanyNameQuestionsObj)
                     }}
                 />
                 {error && (
-                    <p className="text-red-500 mt-2">Please fill in this field.</p>
+                    <p className="text-red-500 mt-2">{error}</p>
                 )}
                 {/* PREVIOUS QUESTION BUTTON */}
                 {currentQuestionIndex > 0 ?
                     (
                         <button
-                            className="bg-purple-500 rounded-lg px-4 py-2 text-white font-semibold focus:outline-none hover:bg-purple-600 transition-colors duration-300"
+                            className="bg-purple-500 rounded-lg px-4 py-2 text-white font-semibold focus:outline-none hover:bg-purple-600 transition-colors duration-300 mt-2"
                             onClick={handlePrevQuestion}
                         >
                             Prev
                         </button>
                     ) : ''}
                 {/* NEXT QUESTION BUTTON */}
-                {currentQuestionIndex < (taglineQuestions?.length - 1) ?
+                {currentQuestionIndex < (companyNameQuestions?.length - 1) ?
                     (
                         <button
-                            className="bg-purple-500 rounded-lg px-4 py-2 text-white font-semibold focus:outline-none hover:bg-purple-600 transition-colors duration-300"
+                            className="bg-purple-500 rounded-lg px-4 py-2 text-white font-semibold focus:outline-none hover:bg-purple-600 transition-colors duration-300 mt-2"
                             style={{ marginLeft: currentQuestionIndex === 0 ? "350px" : "285px" }}
                             onClick={handleNextQuestion}
                         >
@@ -110,10 +120,10 @@ const TaglineGenPage = (props: PropsType) => {
                     ) : ''}
                 {/* FINAL SUBMIT BUTTON */}
                 {
-                    currentQuestionIndex === (taglineQuestions?.length - 1) ?
+                    currentQuestionIndex === (companyNameQuestions?.length - 1) ?
                         (
                             <button
-                                className="bg-purple-500 rounded-lg px-4 py-2 text-white font-semibold focus:outline-none hover:bg-purple-600 transition-colors duration-300"
+                                className="bg-purple-500 rounded-lg px-4 py-2 text-white font-semibold focus:outline-none hover:bg-purple-600 transition-colors duration-300 mt-2"
                                 style={{ marginLeft: "254px" }}
                                 onClick={handleGenerate}
                             >
@@ -126,4 +136,4 @@ const TaglineGenPage = (props: PropsType) => {
     );
 };
 
-export default TaglineGenPage;
+export default CompanyNameGenPage;
