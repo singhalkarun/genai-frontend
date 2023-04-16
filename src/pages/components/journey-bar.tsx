@@ -17,9 +17,9 @@ const JourneyBar = (props: PropsType) => {
     };
 
     const journey = [
-        { title: "Create company name", step: "1" },
-        { title: "Create tagline", step: "2" },
-        { title: "Create company logo", step: "3" },
+        { title: "Generate company name", step: "1" },
+        { title: "Generate tagline", step: "2" },
+        { title: "Generate company logo", step: "3" },
     ];
 
     return (

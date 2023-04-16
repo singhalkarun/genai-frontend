@@ -33,7 +33,7 @@ interface PropsType {
 
 const TaglineGenPage = (props: PropsType) => {
     const { step, setStep, contextId, setContextId } = props;
-    const companyName = localStorage.getItem("companyName")
+    const companyName = typeof window !== 'undefined' ? localStorage?.getItem("companyName") : ""
     const [subPage, setSubPage] = useState<string>('generation') //generation - Generate page, selection - Selection page
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
     const [selectedCompanyTagline, setSelectedCompanyTagline] = useState<string>('');
@@ -111,7 +111,7 @@ const TaglineGenPage = (props: PropsType) => {
     }
 
     const handleSubmit = () => {
-        localStorage.setItem('tagLine', selectedCompanyTagline)
+        localStorage?.setItem('tagLine', selectedCompanyTagline)
         setStep('3')
     }
 
