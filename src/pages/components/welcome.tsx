@@ -28,6 +28,9 @@ const WelcomePage = (props: propsType) => {
             >
                 Start your journey now
             </button>
+            <button  onClick={() => {
+                setStep("5")
+            }}>Demo</button>
         </div>
     );
 };

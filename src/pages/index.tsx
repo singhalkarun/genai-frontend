@@ -4,6 +4,11 @@ import WelcomePage from "./components/welcome";
 import CompanyNameGenPage from "./components/company-name-gen";
 import TaglineGenPage from "./components/tagline-gen";
 import LogoGenPage from "./components/logo-gen";
+import Demo from "./components/demo";
+import Playground from "./components/playground";
+
+
+
 import JourneyBar from "./components/journey-bar";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -82,7 +87,9 @@ export default function Home() {
           {step === "0" ? <WelcomePage step={step} setStep={setStep} contextId={contextId} setContextId={setContextId} /> :
             step === "1" ? <CompanyNameGenPage step={step} setStep={setStep} contextId={contextId} setContextId={setContextId} /> :
               step === "2" ? <TaglineGenPage step={step} setStep={setStep} contextId={contextId} setContextId={setContextId} /> :
-                step === "3" ? <LogoGenPage /> : ""}
+                step === "3" ? <LogoGenPage /> : 
+                step === "4" ? <Demo /> :
+                step === "5" ?  <Playground /> :  ""}
         </div>
       </div>
 
