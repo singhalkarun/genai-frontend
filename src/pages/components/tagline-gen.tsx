@@ -44,8 +44,7 @@ const TaglineGenPage = (props: PropsType) => {
     const taglineQuestions = [
         "What problem does your startup solve?",
         "What's the one thing you want people to remember about your startup?",
-        "Additional information?",
-        "Number of words in tagline?"
+        "Additional information?"
     ]
 
     const [postQuestion, { data, error, loading }] = useMutation(INSERT_CONVERSATION_MUTATION)
@@ -81,13 +80,16 @@ const TaglineGenPage = (props: PropsType) => {
     const handleGenerate = async () => {
         setSubPage("selection")
         //GENERATING PROMPT BASED ON QUESTION ANSWER ARRAY OF OBJECTS
-        let prompt = `Please write company names based on information below and please follow output format - company name: ${companyName}, output format: separate each tagline with a comma and no bullet points and don't write extra text before or after results, Number of taglines?: 5`
+        let prompt = `1. Write company taglines based on below data - company name: ${companyName}, output format: separate each tagline with a comma and no bullet points and don't write extra text before or after results, Number of taglines?: 5`
+        const example_output_format = "company tagline1, company tagline2, company tagline3"
         for (let i = 0; i < taglineQuestionsObj.length; i++) {
             prompt += ", " + taglineQuestionsObj[i]?.question + ": " + taglineQuestionsObj[i]?.answer
         }
-
+        prompt += `2. see this example of output format: ${example_output_format}`
+        const body: any = { variables: { question: prompt } }
+        if (contextId) body.variables["conversation_id"] = contextId
         try {
-            const response = await postQuestion({ variables: { question: prompt } })
+            const response = await postQuestion(body)
             setContextId(response?.data?.insert_conversations_one?.id)
             localStorage?.setItem("contextId", response?.data?.insert_conversations_one?.id)
         } catch (error) {
@@ -97,9 +99,10 @@ const TaglineGenPage = (props: PropsType) => {
 
     const handleRetry = async () => {
         //PROMPT BASED ON PREVIOUS CONTEXT
+        setSelectedCompanyTagline("")
         let prompt = 'Generate more company talines based on same context.'
         try {
-            const response = await postQuestion({ variables: { question: prompt } })
+            const response = await postQuestion({ variables: { question: prompt, conversation_id: contextId } })
             setContextId(response?.data?.insert_conversations_one?.id)
             localStorage?.setItem("contextId", response?.data?.insert_conversations_one?.id)
         } catch (error) {

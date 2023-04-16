@@ -67,8 +67,6 @@ const CompanyNameGenPage = (props: PropsType) => {
         "Which industry you're serving for?",
         "What is the USP of your product?",
         "Who is your target audience ?",
-        "Tone for name like creative, unique etc.?",
-        "Length of company name?"
     ]
 
     const handleNextQuestion = () => {
@@ -98,26 +96,32 @@ const CompanyNameGenPage = (props: PropsType) => {
     const handleGenerate = async () => {
         setSubPage("selection")
         //GENERATING PROMPT BASED ON QUESTION ANSWER ARRAY OF OBJECTS
-        let prompt = `Please write company names based on information below and please follow output format - output format: separate each word with a comma and no bullet points and don't write extra text before or after results, Number of company names?: 5`
+        let prompt = `1. Write company names based on below data - output format: separate each word with a comma and no bullet points and don't write extra text before or after results, Number of company names?: 5`
+        const example_output_format = "companyName1, companyName2, companyName3"
         for (let i = 0; i < companyNameQuestionsObj.length; i++) {
             prompt += ", " + companyNameQuestionsObj[i]?.question + ": " + companyNameQuestionsObj[i]?.answer
         }
+        prompt += `2. see this example of output format: ${example_output_format}`
+        const body: any = { variables: { question: prompt } }
+        if (contextId) body.variables["conversation_id"] = contextId
 
         try {
-            const response = await postQuestion({ variables: { question: prompt } })
+            const response = await postQuestion(body)
             setContextId(response?.data?.insert_conversations_one?.id)
             localStorage?.setItem("contextId", response?.data?.insert_conversations_one?.id)
         } catch (error) {
             console.log("ERROR >>", JSON.stringify(error))
         }
+
         console.log("PROMPT >> ", prompt)
     }
 
     const handleRetry = async () => {
+        setSelectedCompanyName("")
         //PROMPT BASED ON PREVIOUS CONTEXT
         let prompt = 'Generate more company names based on same context.'
         try {
-            const response = await postQuestion({ variables: { question: prompt } })
+            const response = await postQuestion({ variables: { question: prompt, conversation_id: contextId } })
             setContextId(response?.data?.insert_conversations_one?.id)
             localStorage?.setItem("contextId", response?.data?.insert_conversations_one?.id)
         } catch (error) {
