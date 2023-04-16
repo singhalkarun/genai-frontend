@@ -12,7 +12,7 @@ const WelcomePage = (props: propsType) => {
     const { step, setStep, contextId, setContextId } = props;
 
     return (
-        <div className="max-w-md w-full" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+        <div className="max-w-md w-full" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", marginBottom: "10vh" }}>
             <h1 className="bg-gradient-to-r from-blue-500 to-purple-500 text-transparent bg-clip-text text-4xl font-bold text-center mb-4">Welcome to BrandSeed</h1>
             <p className="text-lg text-center text-gray-600 mb-8">
                 Seed your startup with our AI tools. What are you waiting for? Start your journey now!
@@ -28,9 +28,6 @@ const WelcomePage = (props: propsType) => {
             >
                 Start your journey now
             </button>
-            <button  onClick={() => {
-                setStep("5")
-            }}>Demo</button>
         </div>
     );
 };

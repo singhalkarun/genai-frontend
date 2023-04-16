@@ -79,34 +79,59 @@ export default function Home() {
 
   return (
     <>
+      {/* NAVBAR */}
+      <div className="bg-gray-800 py-2">
+        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+          <div className="flex-shrink-0">
+            <p className="bg-gradient-to-r from-blue-500 to-purple-500 text-transparent bg-clip-text text-3xl font-bold text-center" style={{
+              marginLeft: "-50px"
+            }}>BrandSeed</p>
+          </div>
+          <div className="hidden sm:flex sm:items-center sm:ml-6">
+            <p className="text-gray-100 hover:text-gray-500 text-base px-3 py-2 rounded-md font-medium">Check the playground!</p>
+            <button
+              className="ml-4 bg-purple-500 rounded-lg px-4 py-2 text-white font-semibold focus:outline-none hover:bg-purple-600 transition-colors duration-300 "
+              style={{
+                width: "110px"
+              }}
+              onClick={() => {
+                setStep('5');
+              }}
+            >
+              Playground
+            </button>
+          </div>
+          <div className="hidden sm:flex sm:items-center sm:ml-6">
+            <p className="text-gray-100 hover:text-gray-500 text-base px-3 py-2 rounded-md font-medium">Feeling stuck? Let's hit the restart button and start fresh!</p>
+            <button
+              className="ml-4 bg-purple-500 rounded-lg px-4 py-2 text-white font-semibold focus:outline-none hover:bg-purple-600 transition-colors duration-300 "
+              style={{
+                width: "180px"
+              }}
+              onClick={() => {
+                setStep('0');
+              }}
+            >
+              Restart your journey
+            </button>
+          </div>
+        </nav>
+      </div>
       <div style={{ display: "flex", flexDirection: "row", height: "auto" }}>
+        {/* JOURNEYBAR */}
         <div>
           <JourneyBar step={step} setStep={setStep} contextId={contextId} setContextId={setContextId} />
         </div>
+        {/* ROUTING BASED ON STEP */}
         <div className="container mx-auto px-4 h-screen flex justify-center items-center bg-gray-100">
           {step === "0" ? <WelcomePage step={step} setStep={setStep} contextId={contextId} setContextId={setContextId} /> :
             step === "1" ? <CompanyNameGenPage step={step} setStep={setStep} contextId={contextId} setContextId={setContextId} /> :
               step === "2" ? <TaglineGenPage step={step} setStep={setStep} contextId={contextId} setContextId={setContextId} /> :
-                step === "3" ? <LogoGenPage /> : 
-                step === "4" ? <Demo /> :
-                step === "5" ?  <Playground /> :  ""}
+                step === "3" ? <LogoGenPage /> :
+                  step === "4" ? <Demo /> :
+                    step === "5" ? <Playground /> : ""}
         </div>
       </div>
-
-      {/* <h1 className="text-3xl font-bold ">GEN-AI</h1>
-
-      {chatLog.map((message, index) => (
-        <div key="index">{message.message}</div>
-      ))}
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Type your message..."
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-        />
-        <button type="submit">Send</button>
-      </form> */}
     </>
   );
 }
