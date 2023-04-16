@@ -59,13 +59,12 @@ export default function Playground() {
 
   return (
     <form onSubmit={handleSubmit} className="flex-none p-6">
-      <div className="w-full px-4 md:max-w-2xl md:my-12">
-        <input
-          type="text"
+      <div className="w-full px-4 md:max-w-2xl md:my-12 flex">
+        <textarea
           placeholder="Please write your question here..."
           className={`border ${
             error ? "border-red-500" : "border-gray-400"
-          } w-full p-4 mb-8 border-2 border-black rounded-lg resize-none`}
+          } flex-grow p-4 mb-8 border-2 border-black rounded-lg resize-none h-full`}
           value={inputValue}
           onChange={(e) => {
             setInputValue(e.target.value);
@@ -73,16 +72,16 @@ export default function Playground() {
         />
         <button
           type="submit"
-          className="bg-purple-500 rounded-lg px-4 py-2 text-white font-semibold focus:outline-none hover:bg-purple-600 transition-colors duration-300"
+          className="bg-purple-500 rounded-lg px-4 py-2 text-white font-semibold focus:outline-none hover:bg-purple-600 transition-colors duration-300 ml-2 h-full"
         >
           Send
         </button>
-        {subscriptionResult?.loading != undefined && (subscriptionResult?.loading == true || (subscriptionResult?.data != undefined && subscriptionResult?.data?.conversations_by_pk?.answer == null))  && <TypingAnimation />}
-        
-        {subscriptionResult?.loading != undefined && subscriptionResult?.loading != true && subscriptionResult?.data != undefined && subscriptionResult?.data?.conversations_by_pk?.answer != null && <div  className={`border ${
-            error ? "border-red-500" : "border-gray-400"
-          } w-full p-4 mb-8 border-2 border-black rounded-lg resize-none`}> {subscriptionResult?.data?.conversations_by_pk?.answer}</div>}
       </div>
+      {subscriptionResult?.loading != undefined && (subscriptionResult?.loading == true || (subscriptionResult?.data != undefined && subscriptionResult?.data?.conversations_by_pk?.answer == null)) && <TypingAnimation />}
+      {subscriptionResult?.loading != undefined && subscriptionResult?.loading != true && subscriptionResult?.data != undefined && subscriptionResult?.data?.conversations_by_pk?.answer != null && <div className={`border ${
+        error ? "border-red-500" : "border-gray-400"
+      } w-full p-4 mb-8 border-2 border-black rounded-lg resize-none`}> {subscriptionResult?.data?.conversations_by_pk?.answer}</div>}
     </form>
   );
+  
 }

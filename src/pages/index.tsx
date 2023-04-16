@@ -50,24 +50,11 @@ export default function Home({hasuraBaseUrl, hasuraAdminSecret}: HomeProps) {
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
           <div className="flex-shrink-0">
             <p className="bg-gradient-to-r from-blue-500 to-purple-500 text-transparent bg-clip-text text-3xl font-bold text-center" style={{
-              marginLeft: "-50px"
+              marginLeft: "-80px"
             }}>BrandSeed</p>
           </div>
-          <div className="hidden sm:flex sm:items-center sm:ml-6">
-            <p className="text-gray-100 hover:text-gray-500 text-base px-3 py-2 rounded-md font-medium">Check the playground!</p>
-            <button
-              className="ml-4 bg-purple-500 rounded-lg px-4 py-2 text-white font-semibold focus:outline-none hover:bg-purple-600 transition-colors duration-300 "
-              style={{
-                width: "110px"
-              }}
-              onClick={() => {
-                setStep('5');
-              }}
-            >
-              Playground
-            </button>
-          </div>
-          <div className="hidden sm:flex sm:items-center sm:ml-6">
+         
+          <div className="hidden sm:flex sm:items-center ml-auto">
             <p className="text-gray-100 hover:text-gray-500 text-base px-3 py-2 rounded-md font-medium">{`Feeling stuck? Let's hit the restart button and start fresh!`}</p>
             <button
               className="ml-4 bg-purple-500 rounded-lg px-4 py-2 text-white font-semibold focus:outline-none hover:bg-purple-600 transition-colors duration-300 "
