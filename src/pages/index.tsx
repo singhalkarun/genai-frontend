@@ -6,13 +6,12 @@ import TaglineGenPage from "./components/tagline-gen";
 import LogoGenPage from "./components/logo-gen";
 import Demo from "./components/demo";
 import Playground from "./components/playground";
-
 import { useRouter } from 'next/router'
 import ErrorPage from 'next/error'
-
 import JourneyBar from "./components/journey-bar";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import getClient from "./api/apollo";
+import Head from 'next/head';
 
 const inter = Inter({ subsets: ["latin"] });
 interface ChatMessage {
@@ -25,35 +24,39 @@ interface HomeProps {
   hasuraAdminSecret: string
 }
 
-export default function Home({hasuraBaseUrl, hasuraAdminSecret}: HomeProps) {
+export default function Home({ hasuraBaseUrl, hasuraAdminSecret }: HomeProps) {
   const [step, setStep] = useState<string>("0");
   const [contextId, setContextId] = useState<string>("");
 
 
   //On page refresh getting step and contextId from local storage
   useEffect(() => {
-    const step = localStorage.getItem('step');
-    const contextId = localStorage.getItem('contextId')
+    const step = localStorage?.getItem('step');
+    const contextId = localStorage?.getItem('contextId')
     if (step) setStep(step)
     if (contextId) setContextId(contextId)
   }, [])
 
   const router = useRouter()
   if (!router.isFallback && !hasuraAdminSecret && !hasuraBaseUrl) {
-      return <ErrorPage statusCode={404} />
+    return <ErrorPage statusCode={404} />
   }
 
   return (
     <>
+      <Head>
+        <title>BrandSeed</title>
+        {/* <link rel="icon" href="/my-favicon.ico" /> */}
+      </Head>
       {/* NAVBAR */}
-      <div className="bg-gray-800 py-2">
+      <div className="bg-gray-800 py-2 fixed top-0 w-full z-10">
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
           <div className="flex-shrink-0">
             <p className="bg-gradient-to-r from-blue-500 to-purple-500 text-transparent bg-clip-text text-3xl font-bold text-center" style={{
               marginLeft: "-80px"
             }}>BrandSeed</p>
           </div>
-         
+
           <div className="hidden sm:flex sm:items-center ml-auto">
             <p className="text-gray-100 hover:text-gray-500 text-base px-3 py-2 rounded-md font-medium">{`Feeling stuck? Let's hit the restart button and start fresh!`}</p>
             <button
