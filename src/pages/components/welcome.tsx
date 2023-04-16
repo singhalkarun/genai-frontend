@@ -1,5 +1,6 @@
 import React from 'react';
 
+//PROPS INTERFACE
 interface propsType {
     step: string,
     setStep: any,
@@ -7,53 +8,27 @@ interface propsType {
     setContextId: any
 }
 
-//STYLES
-const containerStyle: any = {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: '100vh',
-    backgroundColor: '#F8F8F8'
-};
-
-const titleStyle: any = {
-    fontSize: '3rem',
-    marginBottom: '1rem',
-    textAlign: 'center',
-    color: '#333'
-};
-
-const descriptionStyle: any = {
-    fontSize: '1.5rem',
-    marginBottom: '2rem',
-    textAlign: 'center',
-    color: '#555'
-};
-
-const buttonStyle: any = {
-    padding: '1rem 2rem',
-    fontSize: '1.5rem',
-    fontWeight: 'bold',
-    color: '#FFF',
-    backgroundColor: '#0070F3',
-    border: 'none',
-    borderRadius: '0.5rem',
-    cursor: 'pointer'
-};
-
 const WelcomePage = (props: propsType) => {
-
-    const { step, setStep, contextId, setContextId } = props
+    const { step, setStep, contextId, setContextId } = props;
 
     return (
-        <div style={containerStyle}>
-            <h1 style={titleStyle}>Welcome to My Website</h1>
-            <p style={descriptionStyle}>We are glad to have you here. Start your journey now!</p>
-            <button style={buttonStyle} onClick={() => {
-                setStep("1")
-            }}>Start your journey now</button>
-            <button style={buttonStyle} onClick={() => {
+        <div className="max-w-md w-full" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+            <h1 className="bg-gradient-to-r from-blue-500 to-purple-500 text-transparent bg-clip-text text-4xl font-bold text-center mb-4">Welcome to BrandSeed</h1>
+            <p className="text-lg text-center text-gray-600 mb-8">
+                Seed your startup with our AI tools. What are you waiting for? Start your journey now!
+            </p>
+            <button
+                className="bg-purple-500 rounded-lg px-4 py-2 text-white font-semibold focus:outline-none hover:bg-purple-600 transition-colors duration-300 "
+                style={{
+                    width: "200px"
+                }}
+                onClick={() => {
+                    setStep('1');
+                }}
+            >
+                Start your journey now
+            </button>
+            <button  onClick={() => {
                 setStep("5")
             }}>Demo</button>
         </div>

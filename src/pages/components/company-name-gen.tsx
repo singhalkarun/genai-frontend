@@ -1,88 +1,129 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import { error } from 'console';
+import React, { useEffect, useState } from 'react';
 
-interface Question {
-  id: number;
-  value: string;
+interface PropsType {
+    step: string;
+    setStep: any;
+    contextId: string;
+    setContextId: any;
 }
 
-function CompanyNameGenPage() {
-//   const [inputValue, setInputValue] = useState<string>("");
-//   const [answers, setAnswers] = useState<string[]>([]);
-//   const [currentQuestion, setCurrentQuestion] = useState<number>(0);
+const TaglineGenPage = (props: PropsType) => {
+    const { step, setStep, contextId, setContextId } = props;
+    // const companyName = localStorage.getItem("companyName")
+    const companyName = "Mera Company"
+    const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
+    const [inputText, setInputText] = useState<string>('');
+    const [error, setError] = useState<string>('')
 
-  const questions: Question[] = [
-    { id: 1, value: "Question1" },
-    { id: 2, value: "Question2" },
-    { id: 3, value: "Question3" },
-    { id: 4, value: "Question4" },
-  ];
+    const taglineQuestions = [
+        "Which industry you're serving for?",
+        "What is the USP of your product?",
+        "Who is your target audience ?",
+        "Tone for name like creative, unique etc.?",
+        "Length of company name?",
+        "Number of company names?"
+    ]
 
-  
+    const [taglineQuestionsObj, setTaglineQuestionsObj] = useState<any>([])
 
-  const [answers, setAnswers] = useState<string[]>([]);
-    const [currentQuestion, setCurrentQuestion] = useState<number>(0);
+    const handleNextQuestion = () => {
+        if (inputText === '') {
+            setError("Please provide answer for this question.")
+            return
+        }
+        setInputText(taglineQuestionsObj[currentQuestionIndex + 1]?.answer)
+        setCurrentQuestionIndex(currentQuestionIndex + 1)
+    }
 
-    function handleAnswer(questionId: number, answer: string) {
-        setAnswers(prevAnswers => {
-            const newAnswers = [...prevAnswers];
-            newAnswers[questionId - 1] = answer;
-            return newAnswers;
+    const handlePrevQuestion = () => {
+        setInputText(taglineQuestionsObj[currentQuestionIndex - 1]?.answer)
+        setCurrentQuestionIndex(currentQuestionIndex - 1)
+    }
+
+    const handleGenerate = () => {
+        setStep('2')
+
+        //GENERATING PROMPT BASED ON QUESTION ANSWER ARRAY OF OBJECTS
+        let prompt = `company name: ${companyName} output format: write names directly and seperate each name with a comma`
+        for (let i = 0; i < taglineQuestionsObj.length; i++) {
+            prompt += ", " + taglineQuestionsObj[i]?.question + ": " + taglineQuestionsObj[i]?.answer
+        }
+
+        console.log("PROMPT >>", prompt)
+    }
+
+    useEffect(() => {
+        const questionsMap = taglineQuestions.map((question) => {
+            return {
+                question,
+                answer: ""
+            };
         });
-    }
-
-    function handleSendClick() {
-        setCurrentQuestion(prevQuestion => prevQuestion + 1);
-    }
+        setTaglineQuestionsObj(questionsMap)
+    }, [])
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
-            {questions.slice(0, currentQuestion).map(q => (
-                <div key={q.id} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                    <div style={{ background: '#eee', padding: '10px', borderRadius: '10px', maxWidth: '60%' }}>
-                        <p style={{ margin: 0 }}>{q.value}</p>
-                    </div>
-                    <div style={{ background: '#fff', padding: '10px', borderRadius: '10px', maxWidth: '60%', alignSelf: 'flex-end' }}>
-                        <p style={{ margin: 0 }}>{answers[q.id - 1]}</p>
-                    </div>
-                </div>
-            ))}
-            <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center' }}>
-                <input type="text" onChange={(e) => handleAnswer(questions[currentQuestion].id, e.target.value)} />
-                <button onClick={handleSendClick}>Send</button>
+        <div className="max-w-md w-full" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+            <h1 className="text-4xl font-bold text-center mb-4">
+                Generate name for your company!
+            </h1>
+            <div className="w-full px-4 md:max-w-2xl md:my-12">
+                <label className="text-lg font-bold mb-4" htmlFor="context">
+                    {taglineQuestionsObj[currentQuestionIndex]?.question}
+                </label>
+                <input
+                    type="text"
+                    placeholder="Please write your answer here..."
+                    className={`border ${error ? 'border-red-500' : 'border-gray-400'} w-full p-4 border-2 border-black rounded-lg resize-none`}
+                    value={inputText}
+                    onChange={(e) => {
+                        setInputText(e.target.value)
+                        let updatedTaglineQuestionObj = taglineQuestionsObj
+                        updatedTaglineQuestionObj[currentQuestionIndex].answer = e.target.value
+                        setTaglineQuestionsObj(updatedTaglineQuestionObj)
+                    }}
+                />
+                {error && (
+                    <p className="text-red-500 mt-2">Please fill in this field.</p>
+                )}
+                {/* PREVIOUS QUESTION BUTTON */}
+                {currentQuestionIndex > 0 ?
+                    (
+                        <button
+                            className="bg-purple-500 rounded-lg px-4 py-2 text-white font-semibold focus:outline-none hover:bg-purple-600 transition-colors duration-300"
+                            onClick={handlePrevQuestion}
+                        >
+                            Prev
+                        </button>
+                    ) : ''}
+                {/* NEXT QUESTION BUTTON */}
+                {currentQuestionIndex < (taglineQuestions?.length - 1) ?
+                    (
+                        <button
+                            className="bg-purple-500 rounded-lg px-4 py-2 text-white font-semibold focus:outline-none hover:bg-purple-600 transition-colors duration-300"
+                            style={{ marginLeft: currentQuestionIndex === 0 ? "350px" : "285px" }}
+                            onClick={handleNextQuestion}
+                        >
+                            Next
+                        </button>
+                    ) : ''}
+                {/* FINAL SUBMIT BUTTON */}
+                {
+                    currentQuestionIndex === (taglineQuestions?.length - 1) ?
+                        (
+                            <button
+                                className="bg-purple-500 rounded-lg px-4 py-2 text-white font-semibold focus:outline-none hover:bg-purple-600 transition-colors duration-300"
+                                style={{ marginLeft: "254px" }}
+                                onClick={handleGenerate}
+                            >
+                                Generate
+                            </button>
+                        ) : ''
+                }
             </div>
-        </div>
+        </div >
     );
-}
+};
 
-export default CompanyNameGenPage;
-
-// import { useState } from 'react';
-
-// interface Question {
-//     id: number;
-//     value: string;
-// }
-
-// const questions: Question[] = [
-//     { id: 1, value: "Question1" },
-//     { id: 2, value: "Question2" },
-//     { id: 3, value: "Question3" },
-//     { id: 4, value: "Question4" }
-// ];
-
-// function App() {
-//     const [answers, setAnswers] = useState<string[]>([]);
-
-//     function handleAnswer(questionId: number, answer: string) {
-//         setAnswers(prevAnswers => {
-//             const newAnswers = [...prevAnswers];
-//             newAnswers[questionId - 1] = answer;
-//             return newAnswers;
-//         });
-//     }
-
-//     return (
-       
-//     );
-// }
+export default TaglineGenPage;
