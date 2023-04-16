@@ -54,7 +54,7 @@ const TaglineGenPage = (props: PropsType) => {
         setStep('3')
 
         //GENERATING PROMPT BASED ON QUESTION ANSWER ARRAY OF OBJECTS
-        let prompt = `company name: ${companyName} output format: write taglines directly and seperate each tagline with  a comma like array format`
+        let prompt = `company name: ${companyName}, output format: separate each tagline with a comma and no bullet points`
         for (let i = 0; i < taglineQuestionsObj.length; i++) {
             prompt += ", " + taglineQuestionsObj[i]?.question + ": " + taglineQuestionsObj[i]?.answer
         }

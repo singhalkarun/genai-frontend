@@ -55,7 +55,7 @@ const CompanyNameGenPage = (props: PropsType) => {
         setStep('2')
 
         //GENERATING PROMPT BASED ON QUESTION ANSWER ARRAY OF OBJECTS
-        let prompt = `company name: ${companyName} output format: write names directly and seperate each name with a comma`
+        let prompt = `output format: output format: separate each word with a comma and no bullet points`
         for (let i = 0; i < companyNameQuestionsObj.length; i++) {
             prompt += ", " + companyNameQuestionsObj[i]?.question + ": " + companyNameQuestionsObj[i]?.answer
         }
